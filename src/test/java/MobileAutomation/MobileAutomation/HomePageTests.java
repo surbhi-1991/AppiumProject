@@ -55,6 +55,4 @@ public class HomePageTests {
 		assertTrue(androidDriver.findElement(pageHeading).isDisplayed());
 
 	}
-	// now you can add second test case here..but mere code me kya dikkat thi aapne
-	// kewal same page par hi same code dala jo befor methode me chal raha tha
 }
