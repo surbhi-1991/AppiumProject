@@ -53,13 +53,29 @@ public class AppiumBasics {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.presenceOfElementLocated(pageHeading));
 		boolean isHeadingDisplayed = driver.findElement(pageHeading).isDisplayed();
+
 	}
 
 	@Test(priority = 2)
 	public void addToCart() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.presenceOfElementLocated(addtocart));
+
+		boolean isRemoveButtonDisplayed;
+		try {
+			isRemoveButtonDisplayed = driver.findElement(removebutton).isDisplayed();
+		} catch (Exception e) {
+			isRemoveButtonDisplayed = false; // no such element exception
+		}
+
+		
+		assertFalse(isRemoveButtonDisplayed);
+
+		
 		driver.findElement(addtocart).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(removebutton)); // ab chalana
+		isRemoveButtonDisplayed = driver.findElement(removebutton).isDisplayed();
+		assertTrue(isRemoveButtonDisplayed);
 	}
 
 	@Test(priority = 3)
@@ -67,21 +83,30 @@ public class AppiumBasics {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.presenceOfElementLocated(gotocart));
 		driver.findElement(gotocart).click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(yourcartheading));
+		WebElement isCartPageHeading = driver.findElement(yourcartheading);
+		Assert.assertEquals(true, isCartPageHeading.isDisplayed());
 	}
 
 	@Test(priority = 4, dependsOnMethods = { "addToCart", "goToCart" })
 	public void removeFromCart() {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		wait.until(ExpectedConditions.presenceOfElementLocated(removefromcart));
 		driver.findElement(removefromcart).click();
+
+		// invisibility false hone ka matlab hai its visible
+		Boolean removeButton = wait.until(ExpectedConditions.invisibilityOfElementLocated(removefromcart));
+		Assert.assertTrue(removeButton);
 	}
 
 	@Test(priority = 5)
 	public void clickOnContinueShopping() {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//		wait.until(ExpectedConditions.presenceOfElementLocated(gotocart));
-//		driver.findElement(gotocart).click();
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		wait.until(ExpectedConditions.presenceOfElementLocated(continueshopping));
 		driver.findElement(continueshopping).click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(productpageheading));
+		WebElement isHeadingProduct = driver.findElement(productpageheading);
+		Assert.assertEquals(true, isHeadingProduct.isDisplayed());
+
 	}
 }
